@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirm your email - Jati Niti</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: #f6f6f7;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #111827;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    max-width: 420px;
+    width: 100%;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 28px;
+    margin: 20px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#fff0f7,#fff6f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 28px;
+  }
+  h1 {
+    font-size: 22px;
+    margin: 0 0 12px;
+    color: #111827;
+  }
+  p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4b5563;
+    margin: 0 0 26px;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 50px;
+    background: linear-gradient(90deg,#ed0877,#f51b62,#ff5a24);
+    color: #fff !important;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(237,23,109,.20);
+    border: none;
+    cursor: pointer;
+  }
+  .btn:active { opacity: 0.9; }
+  .error {
+    color: #b42318;
+    font-size: 14px;
+    margin-top: 18px;
+  }
+  .hint {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 22px;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="icon">✉️</div>
+  <h1 id="title">Confirm your email address</h1>
+  <p id="subtitle">
+    Tap the button below to securely confirm your email and activate your
+    Jati Niti account.
+  </p>
+
+  <div id="confirmArea">
+    <!-- The real confirmation link is injected here by JavaScript below,
+         only after parsing it from the URL. It is NEVER auto-navigated —
+         the user must tap it themselves. This is what protects the
+         one-time token from being consumed by link-scanning bots that
+         only prefetch the URL that was directly in the email, not links
+         rendered on a page loaded from that URL. -->
+  </div>
+
+  <p class="hint">If you didn't request this, you can safely ignore this page.</p>
+</div>
+
+<script>
+  (function () {
+    // The email button links here as:
+    //   confirm-signup.html?confirmation_url=<the real Supabase link>
+    // The real link itself contains its own "&" separated params
+    // (token, type, redirect_to), so we deliberately do NOT use
+    // URLSearchParams (which would cut it off at the first extra "&").
+    // Since confirmation_url is always the last thing appended, we can
+    // safely take everything after "confirmation_url=" as the full,
+    // intact target URL.
+    var marker = "confirmation_url=";
+    var href = window.location.href;
+    var idx = href.indexOf(marker);
+    var confirmArea = document.getElementById("confirmArea");
+
+    if (idx === -1) {
+      confirmArea.innerHTML =
+        '<p class="error">This confirmation link looks incomplete or invalid. ' +
+        'Please open the link from your latest confirmation email again.</p>';
+      return;
+    }
+
+    var confirmationUrl = href.substring(idx + marker.length);
+
+    var btn = document.createElement("a");
+    btn.href = confirmationUrl;
+    btn.className = "btn";
+    btn.textContent = "Confirm your email address";
+    confirmArea.appendChild(btn);
+  })();
+</script>
+
+</body>
+</html>
